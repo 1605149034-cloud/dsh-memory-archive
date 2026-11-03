@@ -1,0 +1,7 @@
+node_modules/
+*.tgz
+_installtest/
+_ziptest/
+.npmrc
+*.log
+.DS_Store

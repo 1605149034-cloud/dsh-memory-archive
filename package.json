@@ -1,0 +1,78 @@
+{
+  "name": "dsh-memory-archive",
+  "version": "0.1.0",
+  "description": "DSH 会话记忆库：按天归档会话、本地检索、加密备份，并可通过 SMTP / Webhook / 仅本地三种通道上传。零私有信息，首次运行向导配置自己的邮箱与密码。",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./cli": "./cli.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "dsh-memory-archive": "cli.js"
+  },
+  "files": [
+    "index.js",
+    "cli.js",
+    "cli.mjs",
+    "src",
+    "docs",
+    "cordis.patch.yml",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "selftest": "node cli.mjs selftest",
+    "pack:check": "npm pack --dry-run",
+    "prepublishOnly": "npm test"
+  },
+  "dependencies": {
+    "@zip.js/zip.js": "^2.24.0",
+    "imapflow": "^2.10.0",
+    "mailparser": "^3.14.1",
+    "nodemailer": "^10.3.1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": ">=0.1.0-rc.7"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=22.15"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "memory",
+    "archive",
+    "backup",
+    "session",
+    "smtp"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "catalog": {
+      "category": "tool",
+      "summary": {
+        "en": "Archive DSH sessions by day, search them locally, and back them up with AES-256 encryption to SMTP, webhook, or local-only storage.",
+        "zh": "把 DSH 会话按天归档、本地检索，并用 AES-256 加密备份到 SMTP、Webhook 或仅本地。"
+      },
+      "capabilities": [
+        "fs",
+        "shell",
+        "network"
+      ]
+    }
+  },
+  "license": "MIT"
+}

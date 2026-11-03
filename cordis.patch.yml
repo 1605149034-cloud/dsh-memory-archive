@@ -1,0 +1,4 @@
+# dsh-memory-archive - mount declaration
+- insert:
+    - id: memory-archive
+      name: dsh-memory-archive
