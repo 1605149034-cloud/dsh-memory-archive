@@ -1,3 +1,8 @@
+## 0.1.1
+
+- docs: README 补「init → archive → selftest → backup」的首次使用顺序，并说明空数据下 selftest 报红属正常
+- doctor: 明确打印实际使用的 sessions 目录，便于排查「换盘/换 DSH_HOME 后归档 0 条」
+
 # Changelog
 
 ## 0.1.0

@@ -1,5 +1,17 @@
 # dsh-memory-archive
 
+## 首次使用顺序（很重要）
+
+```text
+dsh-memory-archive init        # 1. 配置邮箱/密码，跑健康检查
+dsh-memory-archive archive     # 2. 先归档一次，生成切片
+dsh-memory-archive selftest    # 3. 再自检；没归档时 selftest 会红，这是正常的
+dsh-memory-archive backup      # 4. 加密备份并上传
+```
+
+> 空的归档目录下直接跑 selftest，第 4~6 项会 FAIL —— 不是装坏了，是还没有数据。
+
+
 把 DSH 会话按天归档成可检索的「历史书」，并用 AES-256 加密备份到 SMTP、Webhook 或仅本地。
 **纯 Node、可跨平台、零内置私有信息**：邮箱、授权码、备份密码都由首次运行向导由用户自己填。
 

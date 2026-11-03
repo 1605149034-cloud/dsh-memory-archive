@@ -1,6 +1,6 @@
 {
   "name": "dsh-memory-archive",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DSH 会话记忆库：按天归档会话、本地检索、加密备份，并可通过 SMTP / Webhook / 仅本地三种通道上传。零私有信息，首次运行向导配置自己的邮箱与密码。",
   "type": "module",
   "main": "index.js",
