@@ -17,8 +17,11 @@ import { search, formatResults, readRange } from './src/search.mjs'
 import { getStatus, formatStatus } from './src/status.mjs'
 import { runInit } from './src/wizard.mjs'
 import { runSelftest } from './src/selftest.mjs'
+import { createRequire } from 'node:module'
 
-const VERSION = '0.1.0'
+// 版本号从 package.json 读，避免发版时忘记同步（0.1.1 曾因硬编码显示旧版本）
+const require_ = createRequire(import.meta.url)
+const VERSION = require_('./package.json').version
 
 function help() {
   console.log(`dsh-memory-archive ${VERSION}
