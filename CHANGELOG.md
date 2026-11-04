@@ -1,3 +1,16 @@
+## 0.1.5
+
+- **内容与 0.1.4 完全相同**，只是版本号往上挪一格。原因：0.1.4 在 registry 侧卡住了 ——
+  第一次发布时被登记成「暂存版本」，但既没落地也没有对应的 stage 记录可以审：
+  ```
+  npm error 409 Conflict - Cannot publish over previously staged version "0.1.4"
+  npm stage list   →  No staged packages found
+  registry 上 0.1.4 →  404
+  ```
+  重发（含手动带 token 重发）一律 E409，`npm stage approve` 也没有 stage-id 可给。
+  ⇒ 遇到这种情况别再跟 0.1.4 较劲，**直接换版本号重发**即可。
+  （2026-11-04 17:30 实测记录，留给下次踩到时省时间）
+
 ## 0.1.4
 
 - **修：注入的地址会指向空目录**。`addressText()` 原来只判 `existsSync(archive.dir)`，
