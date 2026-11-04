@@ -1,3 +1,28 @@
+## 0.1.4
+
+- **修：注入的地址会指向空目录**。`addressText()` 原来只判 `existsSync(archive.dir)`，
+  而 `archive.dir` 默认是 `~/.dsh/memory-archive`（`init` 过就存在，里面只有一个 `config.json`），
+  于是它会把「总目录 …/index.md」「跨天索引 …/tags.json」两条**并不存在**的路径写进系统提示词 ——
+  正是 0.1.3 注释里说要避免的「塞一条指不到东西的路径」。
+  改为判 `existsSync(indexFilePath(cfg))`：有 `index.md` 才算真扫过一遍。
+  > 2026-11-04 实测：改前 `archive.dir` 存在=true、`index.md`/`tags.json` 存在=false；
+  > 改后注入的是真数据目录，且 `memory_search` 用它的配置直接能检到历史轮次。
+- 本机 `archive.dir` 已指向 `D:\工作区\阿深私聊\记忆库`（与同机的 Python 版共用同一份数据）。
+  两侧的切片命名（`<工作区>--<会话>.md`）、`index.md` 结构、`tags.json`
+  （`{generated_at,count,tags}`）一致，已双向交叉验证可互读，不会各存一份。
+  > 注意：`state.json` 是 JS 版自己的扫描状态，Python 版用 `归档状态.json`，两者并存互不影响。
+
+## 0.1.3
+
+- **常驻注入「存档在哪」**：插件现在会往系统提示词里加一段（`memory-archive-address`，静态、排在最末尾），
+  写明存档目录、`index.md`、`tags.json`，以及「跨天找一件事靠标签不靠日期、标签命不中就退回全文搜」。
+  - 为什么必须有：只注册工具不够。压缩（`/compact`）会把对话收成摘要，摘要不会替你记住这份存档存在；
+    压缩后的会话不知道有这个目录，就永远不会调用 `memory_search` —— 装了等于没装。
+    注入段每轮重新拼进上下文，压缩碰不到它。
+  - 用 `section` 而不是 `context`：这段是静态文本，定型后一直命中缓存；`context` 每轮都按新消息算钱。
+  - 归档目录不存在时不注入（没 `init` 过就不该往别人提示词里塞一条指不到东西的路径）；
+    目录被清掉/换机会自动卸载。
+
 ## 0.1.1
 
 - docs: README 补「init → archive → selftest → backup」的首次使用顺序，并说明空数据下 selftest 报红属正常

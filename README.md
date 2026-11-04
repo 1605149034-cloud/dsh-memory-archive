@@ -110,7 +110,16 @@ dsh-memory-archive cleanup [--purge --yes]
 | `memory_backup_now` | `kind? upload?` | `{ok,name,path,size,sha256,parts,upload}` |
 | `memory_status` | 无 | 归档数、最近扫描/备份、密钥库、上传通道、下次定时 |
 
-插件入口 `index.js` 只注册工具 + 启动内置调度；不常驻独立进程，不写系统计划任务。
+插件入口 `index.js` 注册工具 + 启动内置调度 + 挂一段常驻注入；不常驻独立进程，不写系统计划任务。
+
+**常驻注入（0.1.3 起，0.1.4 修判据）**：除了工具，插件还会往系统提示词末尾加一段「存档在哪」——
+存档目录、`index.md`、`tags.json`，以及「跨天找一件事按标签查、标签命不中就退回全文搜」。
+原因是**只注册工具不够**：压缩（`/compact`）会把对话收成摘要，摘要不会替你记住这份存档存在，
+压缩后的会话不知道有它，就永远不会调用 `memory_search`。注入段每轮重新拼进上下文，压缩碰不到它。
+没有 `index.md`（没 `init` 过、或还没扫过第一遍）时不注入；`index.md` 被清掉或换机时自动卸载。
+> 判据是 `index.md` 存不存在，**不是目录**存不存在：`init` 完的目录里只有一个 `config.json`，
+> 只看目录会把一条 `index.md` / `tags.json` 都不存在的地址塞进系统提示词（0.1.4 之前就是这个问题）。
+
 卸载：在 DSH 插件面板移除即可；数据目录默认保留，想彻底删用 `dsh-memory-archive cleanup --purge --yes`。
 
 ## 数据与安全
