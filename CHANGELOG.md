@@ -1,15 +1,14 @@
 ## 0.1.5
 
-- **内容与 0.1.4 完全相同**，只是版本号往上挪一格。原因：0.1.4 在 registry 侧卡住了 ——
-  第一次发布时被登记成「暂存版本」，但既没落地也没有对应的 stage 记录可以审：
-  ```
-  npm error 409 Conflict - Cannot publish over previously staged version "0.1.4"
-  npm stage list   →  No staged packages found
-  registry 上 0.1.4 →  404
-  ```
-  重发（含手动带 token 重发）一律 E409，`npm stage approve` 也没有 stage-id 可给。
-  ⇒ 遇到这种情况别再跟 0.1.4 较劲，**直接换版本号重发**即可。
-  （2026-11-04 17:30 实测记录，留给下次踩到时省时间）
+- **内容与 0.1.4 完全相同**（只有版本号不同）。原因是一次误判导致的重复发布：
+  0.1.4 发出后，`npm publish` 用了新的**暂存 + 异步落地**流程（bypass-2FA token 现在走这条路），
+  落地前约 1~7 分钟里，查 registry 读到的是旧值、`npm stage list` 也看不到暂存记录，
+  于是被误判成“没发出去”，换了个版本号重发 → 0.1.4 与 0.1.5 并存。
+  **0.1.4 已 deprecated，请用 0.1.5。**
+- 教训（写给下次）：`npm publish` 成功后**不要立刻查 registry 下结论**。
+  新版是真异步落地的，正确做法是按版本直查 `https://registry.npmjs.org/<pkg>/<ver>`
+  轮询到 200 为止（最多等 8 分钟）；不要用 packument 的 `npm view <pkg> version`，
+  它更容易吃到 CDN 缓存。
 
 ## 0.1.4
 
